@@ -81,12 +81,24 @@ namespace DatalagringTicketSystem.Services
             }
         }
 
-        /* public static async Task ShowAllTicketsAsync()
-         {
-             var databaseService = new DatabaseService();
-             var ticketService = new TicketService();
+        public  async Task ShowAllTicketsAsync()
+        {
+            var databaseService = new DatabaseService();
+            var userService = new UserService();
 
-         }*/
+            var tickets = await databaseService.GetAllTicketsAsync();
+
+            Console.Clear();
+            foreach (var ticket in tickets)
+            {
+                var userEmail = await userService.GetUserByIdAsync(ticket.Id);
+               
+                Console.WriteLine($"Ticket ID: {ticket.TicketNumber}");
+                Console.WriteLine($"Skapad av Användare: {userEmail.Email} ");
+                Console.WriteLine($"Description: {ticket.Description}");
+                Console.WriteLine(" ");
+            }
+        }
     }
 }
 

@@ -19,7 +19,7 @@ while (true)
             break;
 
         case "2":
-            await menu.CreateNewTicketAsync();
+            await menu.ShowAllTicketsAsync();
             break;
 
         case "3":

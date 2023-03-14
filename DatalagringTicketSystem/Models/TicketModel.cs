@@ -10,7 +10,8 @@ namespace DatalagringTicketSystem.Models
         public DateTime DateCreated { get; set; }
         [DefaultValue(Entities.TicketStatus.EjPåbörjad)]
         public TicketStatus Status { get; set; }
-        public Guid Id { get; set; } 
+        public Guid Id { get; set; }
+        public string UserEmail { get; set; } = null!;
 
      
     }

@@ -2,7 +2,7 @@
 using DatalagringTicketSystem.Models;
 using DatalagringTicketSystem.Models.Entities;
 using Microsoft.EntityFrameworkCore;
-using System.Net.Sockets;
+
 
 
 namespace DatalagringTicketSystem.Services
@@ -30,6 +30,26 @@ namespace DatalagringTicketSystem.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task<IEnumerable<TicketModel>> GetAllTicketsAsync()
+        {
+            var ticketEntities = await _context.Tickets.ToListAsync();
+            var ticketModels = new List<TicketModel>();
+            var userService = new UserService();
+
+            foreach (var ticketEntity in ticketEntities)
+            {
+                var userModel = await userService.GetUserByIdAsync(ticketEntity.Id);
+
+                if (userModel != null)
+                {
+                    TicketModel ticketModel = ticketEntity;
+                    ticketModel.UserEmail = userModel.Email;
+                    ticketModels.Add(ticketModel);
+                }
+            }
+
+            return ticketModels;
+        }
 
 
 
