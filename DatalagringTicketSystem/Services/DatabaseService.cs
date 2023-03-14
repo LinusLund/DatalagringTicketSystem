@@ -2,8 +2,10 @@
 using DatalagringTicketSystem.Models;
 using DatalagringTicketSystem.Models.Entities;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Sockets;
 
-namespace TicketApp.Services
+
+namespace DatalagringTicketSystem.Services
 {
     internal class DatabaseService
     {
@@ -14,19 +16,23 @@ namespace TicketApp.Services
             _context = new DataContext();
         }
 
-        public async Task SaveToDatabaseAsync(TicketModel ticket)
+        public async Task SaveTicketToDatabaseAsync(TicketModel ticket)
         {
             TicketEntity ticketEntity = ticket;
             _context.Add(ticketEntity);
             await _context.SaveChangesAsync();
         }
 
- 
-
-        public async Task<IEnumerable<TicketModel>> GetAll()
+        public async Task SaveUserToDatabaseAsync(UserModel newUser)
         {
-  
+            UserEntity userEntity = newUser;
+            _context.Add(userEntity);
+            await _context.SaveChangesAsync();
         }
+
+
+
+
 
 
     }

@@ -8,5 +8,6 @@ namespace DatalagringTicketSystem.Services
 {
     internal class TicketService
     {
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
-using static DatalagringTicketSystem.Models.Entities.TicketStatusEntity;
+using System.ComponentModel.DataAnnotations.Schema;
+
 
 namespace DatalagringTicketSystem.Models.Entities
 {
@@ -13,15 +14,16 @@ namespace DatalagringTicketSystem.Models.Entities
         [Required]
         public string Description { get; set; } = null!;
 
-        [StringLength(100)]
-        public DateTime DateCreated{ get; set; } = DateTime.Now;
+        
+        public DateTime DateCreated{ get; set; }
 
-      
+
 
         //FK
-        public TicketStatus Status { get; set; }
+        public int Status { get; set; }
 
-        public Guid UserId { get; set; }
+        [ForeignKey("User")]
+        public Guid Id { get; set; }
         public UserEntity User { get; set; } = null!;
 
         public static implicit operator TicketModel(TicketEntity ticketentity)
@@ -32,7 +34,7 @@ namespace DatalagringTicketSystem.Models.Entities
                 Description = ticketentity.Description,
                 DateCreated = ticketentity.DateCreated,
                 Status = (TicketStatus)ticketentity.Status,
-                UserEmail = ticketentity.User.Email
+                Id = ticketentity.Id
 
             };
 
@@ -44,7 +46,9 @@ namespace DatalagringTicketSystem.Models.Entities
             {
                 TicketNumber = ticketentity.TicketNumber,
                 Description = ticketentity.Description,
-                DateCreated = ticketentity.DateCreated   
+                DateCreated = ticketentity.DateCreated,
+                Status = (int)ticketentity.Status,
+                Id = ticketentity.Id
 
             };
 

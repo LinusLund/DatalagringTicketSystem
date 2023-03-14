@@ -20,7 +20,7 @@ namespace DatalagringTicketSystem.Models.Entities
         {
             [Key]
             public int Id { get; set; }
-            public TicketStatus Status { get; set; }
+            public TicketStatus Status { get; set; } = TicketStatus.EjPåbörjad;
         }
     
 

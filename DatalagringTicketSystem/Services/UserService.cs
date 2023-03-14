@@ -13,8 +13,11 @@ namespace DatalagringTicketSystem.Services
             var _user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
             if (_user != null)
                 return new UserModel
-                {
+                {   Id  = _user.Id,
+                    FirstName= _user.FirstName,
+                    LastName= _user.LastName,
                     Email = _user.Email,
+                    PhoneNumber = _user.PhoneNumber,
                 };
 
             else

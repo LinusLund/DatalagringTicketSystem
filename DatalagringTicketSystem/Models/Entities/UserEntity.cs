@@ -35,7 +35,8 @@ namespace DatalagringTicketSystem.Models.Entities
                 Id = userEntity.Id,
                 FirstName = userEntity.FirstName,
                 LastName = userEntity.LastName,
-                Email = userEntity.Email
+                Email = userEntity.Email,
+                PhoneNumber = userEntity.PhoneNumber
             };
 
         }
@@ -47,7 +48,8 @@ namespace DatalagringTicketSystem.Models.Entities
                 Id = customerEntity.Id,
                 FirstName = customerEntity.FirstName,
                 LastName = customerEntity.LastName,
-                Email = customerEntity.Email
+                Email = customerEntity.Email,
+                PhoneNumber = customerEntity.PhoneNumber
             };
 
         }

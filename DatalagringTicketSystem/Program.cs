@@ -19,21 +19,21 @@ while (true)
             break;
 
         case "2":
-            await menu.ListAllCustomersAsync();
+            await menu.CreateNewTicketAsync();
             break;
 
         case "3":
-            await menu.ListSpecificCustomerAsync();
+            await menu.CreateNewTicketAsync();
             break;
 
         case "4":
             Console.Clear();
-            await menu.UpdateSpecificContactAsync();
+            await menu.CreateNewTicketAsync();
             break;
 
         case "5":
             Console.Clear();
-            await menu.DeleteSpecificContactAsync();
+            await menu.CreateNewTicketAsync();
             break;
     }
     Console.WriteLine("\nPress any button to continue...");
