@@ -8,11 +8,15 @@ namespace DatalagringTicketSystem.Models
         public int TicketNumber { get; set; }
         public string Description { get; set; } = null!;
         public DateTime DateCreated { get; set; }
-        [DefaultValue(Entities.TicketStatus.EjPåbörjad)]
+
+        [DefaultValue(TicketStatus.EjPåbörjad)]
         public TicketStatus Status { get; set; }
-        public Guid Id { get; set; }
+
+        public Guid UserId { get; set; }
+        //Har med UserEmail här för att kunna printa den istället för ID där jag vill.
         public string UserEmail { get; set; } = null!;
 
-     
+        public ICollection<CommentEntity> Comments { get; set; } = new List<CommentEntity>();
+
     }
 }

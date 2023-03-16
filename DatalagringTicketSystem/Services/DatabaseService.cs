@@ -4,7 +4,6 @@ using DatalagringTicketSystem.Models.Entities;
 using Microsoft.EntityFrameworkCore;
 
 
-
 namespace DatalagringTicketSystem.Services
 {
     internal class DatabaseService
@@ -38,7 +37,7 @@ namespace DatalagringTicketSystem.Services
 
             foreach (var ticketEntity in ticketEntities)
             {
-                var userModel = await userService.GetUserByIdAsync(ticketEntity.Id);
+                var userModel = await userService.GetUserByIdAsync(ticketEntity.UserId);
 
                 if (userModel != null)
                 {
@@ -51,9 +50,30 @@ namespace DatalagringTicketSystem.Services
             return ticketModels;
         }
 
+        public async Task<TicketEntity> GetAsync(int ticketNumber)
 
+        {
+            var ticket = await _context.Tickets
+                    .FirstOrDefaultAsync(t => t.TicketNumber == ticketNumber);
+                return ticket;
+        }
+        //Tog hjälp av Chat GPT för att lösa problemet med att contexten lagrade samma entitet två gånger.
+        //Nu kollar den först om ticketen är sparad eller inte.
+        public async Task UpdateAsync(TicketModel ticket)
+        {
 
-
-
+            var existingTicket = await _context.Tickets.FindAsync(ticket.TicketNumber);
+            if (existingTicket != null)
+            {
+                existingTicket.Status = (int)ticket.Status;
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                _context.Tickets.Attach(ticket);
+                _context.Entry(ticket).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

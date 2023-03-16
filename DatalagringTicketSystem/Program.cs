@@ -23,12 +23,12 @@ while (true)
             break;
 
         case "3":
-            await menu.CreateNewTicketAsync();
+            await menu.ShowSpecificTicketAsync();
             break;
 
         case "4":
             Console.Clear();
-            await menu.CreateNewTicketAsync();
+            await menu.UpdateStatusAsync();
             break;
 
         case "5":

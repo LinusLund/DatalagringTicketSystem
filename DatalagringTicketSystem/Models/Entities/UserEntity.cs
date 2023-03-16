@@ -1,6 +1,4 @@
-﻿using DatalagringTicketSystem.Models.Entities;
-using DatalagringTicketSystem.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -11,7 +9,7 @@ namespace DatalagringTicketSystem.Models.Entities
     internal class UserEntity
     {
         [Key]
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
 
         [StringLength(50)]
         public string FirstName { get; set; } = null!;
@@ -32,7 +30,7 @@ namespace DatalagringTicketSystem.Models.Entities
         {
             return new UserModel
             {
-                Id = userEntity.Id,
+                UserId = userEntity.UserId,
                 FirstName = userEntity.FirstName,
                 LastName = userEntity.LastName,
                 Email = userEntity.Email,
@@ -41,15 +39,15 @@ namespace DatalagringTicketSystem.Models.Entities
 
         }
 
-        public static implicit operator UserEntity(UserModel customerEntity)
+        public static implicit operator UserEntity(UserModel userEntity)
         {
             return new UserEntity
             {
-                Id = customerEntity.Id,
-                FirstName = customerEntity.FirstName,
-                LastName = customerEntity.LastName,
-                Email = customerEntity.Email,
-                PhoneNumber = customerEntity.PhoneNumber
+                UserId = userEntity.UserId,
+                FirstName = userEntity.FirstName,
+                LastName = userEntity.LastName,
+                Email = userEntity.Email,
+                PhoneNumber = userEntity.PhoneNumber
             };
 
         }

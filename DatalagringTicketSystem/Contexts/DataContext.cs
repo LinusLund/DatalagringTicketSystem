@@ -38,5 +38,6 @@ namespace DatalagringTicketSystem.Contexts
         public DbSet<UserEntity> Users { get; set; } = null!;
         public DbSet<TicketEntity> Tickets { get; set; } = null!;
         public DbSet<TicketStatusEntity> TicketStatus { get; set; } = null!;
+        public DbSet<CommentEntity> Comments { get; set; } = null!;
     }
 }

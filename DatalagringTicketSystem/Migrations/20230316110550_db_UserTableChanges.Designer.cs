@@ -4,6 +4,7 @@ using DatalagringTicketSystem.Contexts;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatalagringTicketSystem.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20230316110550_db_UserTableChanges")]
+    partial class db_UserTableChanges
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,32 +24,6 @@ namespace DatalagringTicketSystem.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.CommentEntity", b =>
-                {
-                    b.Property<int>("CommentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CommentId"));
-
-                    b.Property<DateTime>("CommentDateTime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("CommentText")
-                        .IsRequired()
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
-
-                    b.Property<int>("TicketId")
-                        .HasColumnType("int");
-
-                    b.HasKey("CommentId");
-
-                    b.HasIndex("TicketId");
-
-                    b.ToTable("Comments");
-                });
 
             modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.TicketEntity", b =>
                 {
@@ -127,17 +104,6 @@ namespace DatalagringTicketSystem.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.CommentEntity", b =>
-                {
-                    b.HasOne("DatalagringTicketSystem.Models.Entities.TicketEntity", "Ticket")
-                        .WithMany("Comments")
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Ticket");
-                });
-
             modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.TicketEntity", b =>
                 {
                     b.HasOne("DatalagringTicketSystem.Models.Entities.UserEntity", "User")
@@ -147,11 +113,6 @@ namespace DatalagringTicketSystem.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.TicketEntity", b =>
-                {
-                    b.Navigation("Comments");
                 });
 #pragma warning restore 612, 618
         }

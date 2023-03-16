@@ -1,23 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System.ComponentModel.DataAnnotations;
+﻿using DatalagringTicketSystem.Models.Entities;
 
-
-namespace DatalagringTicketSystem.Models.Entities
+namespace DatalagringTicketSystem.Models
 {
-    internal class CommentEntity
+    internal class CommentModel
     {
-        [Key]
         public int CommentId { get; set; }
-
-        [Required]
-        [StringLength(250)]
         public string CommentText { get; set; } = null!;
-
         public DateTime CommentDateTime { get; set; }
         public int TicketId { get; set; }
         public TicketEntity Ticket { get; set; } = null!;
-
     }
-
 }
-

@@ -16,15 +16,15 @@ namespace DatalagringTicketSystem.Models.Entities
 
         
         public DateTime DateCreated{ get; set; }
-
-
-
-        //FK
+       
         public int Status { get; set; }
 
         [ForeignKey("User")]
-        public Guid Id { get; set; }
+        public Guid UserId { get; set; }
         public UserEntity User { get; set; } = null!;
+
+        //Ett ärende kan ha flera kommentarer, men en kommentar kan bara höra till ett ärende.
+        public ICollection<CommentEntity> Comments { get; set; } = new List<CommentEntity>();
 
         public static implicit operator TicketModel(TicketEntity ticketentity)
         {
@@ -34,7 +34,8 @@ namespace DatalagringTicketSystem.Models.Entities
                 Description = ticketentity.Description,
                 DateCreated = ticketentity.DateCreated,
                 Status = (TicketStatus)ticketentity.Status,
-                Id = ticketentity.Id
+                UserId = ticketentity.UserId,
+                Comments = ticketentity.Comments,
 
             };
 
@@ -48,7 +49,8 @@ namespace DatalagringTicketSystem.Models.Entities
                 Description = ticketentity.Description,
                 DateCreated = ticketentity.DateCreated,
                 Status = (int)ticketentity.Status,
-                Id = ticketentity.Id
+                UserId = ticketentity.UserId,
+                Comments = ticketentity.Comments
 
             };
 
