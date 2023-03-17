@@ -57,6 +57,8 @@ namespace DatalagringTicketSystem.Services
                     .FirstOrDefaultAsync(t => t.TicketNumber == ticketNumber);
                 return ticket;
         }
+
+
         //Tog hjälp av Chat GPT för att lösa problemet med att contexten lagrade samma entitet två gånger.
         //Nu kollar den först om ticketen är sparad eller inte.
         public async Task UpdateAsync(TicketModel ticket)
@@ -74,6 +76,37 @@ namespace DatalagringTicketSystem.Services
                 _context.Entry(ticket).State = EntityState.Modified;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task AddCommentAsync(int TicketNumber, string newComment)
+        {
+            var ticketEntity = await _context.Tickets.FindAsync(TicketNumber);
+
+            if (ticketEntity == null)
+            {
+                throw new Exception($"Ticket with number {TicketNumber} does not exist.");
+            }
+
+            CommentEntity commentEntity = new CommentEntity
+            {
+                TicketNumber = TicketNumber,
+                CommentText = newComment,
+                CommentDateTime = DateTime.Now,
+                Ticket = ticketEntity
+            };
+
+            _context.Add(commentEntity);
+            await _context.SaveChangesAsync();
+        }
+        // Gör en lista av kommentarer och presenterar dem för användare i datum-ordning.
+        public async Task<List<CommentEntity>> GetCommentsAsync(int ticketNumber)
+        {
+            var comments = await _context.Comments
+                .Where(c => c.Ticket.TicketNumber == ticketNumber)
+                .OrderBy(c => c.CommentDateTime)
+                .ToListAsync();
+
+            return comments.Select(c => c).ToList();
         }
     }
 }

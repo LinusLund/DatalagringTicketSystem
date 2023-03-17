@@ -14,14 +14,18 @@ namespace DatalagringTicketSystem.Models.Entities
         [Required]
         public string Description { get; set; } = null!;
 
-        
-        public DateTime DateCreated{ get; set; }
-       
-        public int Status { get; set; }
+        public DateTime DateCreated { get; set; }
 
         [ForeignKey("User")]
         public Guid UserId { get; set; }
         public UserEntity User { get; set; } = null!;
+
+        // New property for TicketStatus
+        public int TicketStatusId { get; set; }
+
+        // Navigation property for TicketStatus
+        [ForeignKey("TicketStatusId")]
+        public TicketStatusEntity TicketStatus { get; set; } = null!;
 
         //Ett ärende kan ha flera kommentarer, men en kommentar kan bara höra till ett ärende.
         public ICollection<CommentEntity> Comments { get; set; } = new List<CommentEntity>();
@@ -33,12 +37,10 @@ namespace DatalagringTicketSystem.Models.Entities
                 TicketNumber = ticketentity.TicketNumber,
                 Description = ticketentity.Description,
                 DateCreated = ticketentity.DateCreated,
-                Status = (TicketStatus)ticketentity.Status,
                 UserId = ticketentity.UserId,
+                TicketStatus = ticketentity.TicketStatus?.Status ?? TicketStatus.EjPåbörjad,
                 Comments = ticketentity.Comments,
-
             };
-
         }
 
         public static implicit operator TicketEntity(TicketModel ticketentity)
@@ -48,12 +50,11 @@ namespace DatalagringTicketSystem.Models.Entities
                 TicketNumber = ticketentity.TicketNumber,
                 Description = ticketentity.Description,
                 DateCreated = ticketentity.DateCreated,
-                Status = (int)ticketentity.Status,
                 UserId = ticketentity.UserId,
-                Comments = ticketentity.Comments
-
+                TicketStatusId = (int)ticketentity.TicketStatus,
+                Comments = ticketentity.Comments,
             };
-
         }
     }
+
 }

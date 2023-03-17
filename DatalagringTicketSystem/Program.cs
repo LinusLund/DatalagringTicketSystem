@@ -9,7 +9,7 @@ while (true)
     Console.WriteLine("2. Show all Tickets");
     Console.WriteLine("3. Show specific Ticket");
     Console.WriteLine("4. Update Ticket Status");
-    Console.WriteLine("5. Delete Ticket");
+    Console.WriteLine("5. Add comment to existing ticket");
     Console.WriteLine("Choose one option from above(1-5): ");
 
     switch (Console.ReadLine())
@@ -33,7 +33,7 @@ while (true)
 
         case "5":
             Console.Clear();
-            await menu.CreateNewTicketAsync();
+            await menu.WriteCommentAsync();
             break;
     }
     Console.WriteLine("\nPress any button to continue...");

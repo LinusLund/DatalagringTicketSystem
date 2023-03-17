@@ -7,16 +7,16 @@ namespace DatalagringTicketSystem.Models.Entities
     
         public enum TicketStatus
         {
-            EjPåbörjad = 1,
-            Påbörjad = 2,
+            Ej_Påbörjad = 1,
+            På_börjad = 2,
             Slutförd = 3
         }
 
         internal class TicketStatusEntity
         {
             [Key]
-            public int Id { get; set; }
-            public TicketStatus Status { get; set; } = TicketStatus.EjPåbörjad;
+            public int StatusId { get; set; }
+            public TicketStatus Status { get; set; } 
         }
     
 

@@ -12,11 +12,11 @@ namespace DatalagringTicketSystem.Services
         //lite mer noggrannt och såg att man skulle spara användar information också. så fick bygga till det.
         public async Task CreateNewTicketAsync()
         {
-            // Skapa instanser av våra service-klasser
+           
             var databaseService = new DatabaseService();
             var userService = new UserService();
 
-            // Fråga användaren om hen har ett befintligt konto
+            
             Console.WriteLine("Do you have an existing account? (yes or no)");
             string input = Console.ReadLine().ToLower();
 
@@ -30,7 +30,7 @@ namespace DatalagringTicketSystem.Services
             }
             else if (input == "yes")
             {
-                // Om användaren har ett konto, be hen att ange sin email och hämta användaren från databasen med hjälp av userService
+                // Om användaren har ett konto, så söker vi i databasen efter en matchande Email.
                 Console.WriteLine("Please enter your email.");
                 string email = Console.ReadLine();
                 user = await userService.GetUserByEmailAsync(email);
@@ -49,7 +49,9 @@ namespace DatalagringTicketSystem.Services
                 return;
             }
             Console.WriteLine(user.UserId);
-            // Skapa en ny supportticket och sätt användarens ID till ticket.UserID
+            // Skapa en ny supportticket och sätt användarens ID till ticket.UserID.
+            // Egentligen nu när jag tänker, så kanske man vill ha en tabell som lånad ID från användare och från Tickets.
+            // så kan man söka i den tabellen. istället för att  låna in användar-idt i Ticket-tabellen.
             var ticket = new TicketModel { UserId = user.UserId };
 
 
@@ -62,7 +64,7 @@ namespace DatalagringTicketSystem.Services
 
             ticket.DateCreated = DateTime.Now;
 
-            // Rensa konsolfönstret och meddela användaren att supportticketen har skapats
+           
             Console.Clear();
             Console.WriteLine("Ticket has been created!");
 
@@ -88,61 +90,56 @@ namespace DatalagringTicketSystem.Services
                 Console.WriteLine(" ");
             }
         }
-        //Söker ut ett specifikt ärende utifrån TicketNumber
+        //Söker ut ett specifikt ärende utifrån TicketNumber, visar även kommentarer på det specifika ärendet.
         public async Task ShowSpecificTicketAsync()
         {
+            var ticketservice = new TicketService();
 
-            var databaseService = new DatabaseService();
-            Console.Clear();
-            Console.Write("Enter the ticket number you wish to find: ");
-            if (int.TryParse(Console.ReadLine(), out int ticketNumber))
+            var ticket = await ticketservice.GetTicketAsync();
+
+            if (ticket != null)
             {
-                var ticket = await databaseService.GetAsync(ticketNumber);
+                Console.WriteLine($"TicketNumber: {ticket.TicketNumber}");
+                Console.WriteLine($"Created by User: {ticket.UserId}");
+                Console.WriteLine($"DateCreated: {ticket.DateCreated}");
+                Console.WriteLine($"Status:{ticket.Status}");
+                Console.WriteLine($"Description: {ticket.Description}");
+                Console.WriteLine("");
 
-                if (ticket != null)
+                //OM det finns kommentarer, rada upp dom i datumföljd.
+                if (ticket.Comments.Any())
                 {
-                    Console.WriteLine($"TicketNumber: {ticket.TicketNumber}");
-                    Console.WriteLine($"Created by User: {ticket.UserId}");
-                    Console.WriteLine($"DateCreated: {ticket.DateCreated}");
-                    Console.WriteLine($"Status:{ticket.Status}");
-                    Console.WriteLine($"Description: {ticket.Description}");
-                    Console.WriteLine("");
-                }
-                else
-                {
-                    Console.Clear();
-                    Console.WriteLine($"No matching ticket with number: {ticketNumber} found.");
-                    Console.WriteLine("");
+                    Console.WriteLine("Comments:");
+                    foreach (var comment in ticket.Comments.OrderBy(c => c.CommentDateTime))
+                    {
+                        Console.WriteLine($" - {comment.CommentDateTime.ToString()} - {comment.CommentText}");
+                    }
                 }
             }
             else
             {
-                Console.WriteLine($"Please type a valid ticket number.");
+                Console.Clear();
+                Console.WriteLine($"No matching ticket with number: {ticket.TicketNumber} found.");
                 Console.WriteLine("");
             }
         }
         //Uppdaterar Statusen på ett specifikt ärende
         public async Task UpdateStatusAsync()
         {
-            var databaseService = new DatabaseService();
-            Console.Clear();
-            Console.Write("Write the ticket number you wish to Update: ");
-            if (!int.TryParse(Console.ReadLine(), out int ticketNumber))
-            {
-                Console.WriteLine("Invalid input. Please enter a valid ticket number.");
-                return;
-            }
+            var databaseservice = new DatabaseService();
+            var ticketservice = new TicketService();
 
-            var ticket = await databaseService.GetAsync(ticketNumber);
+            
+            var ticket = await ticketservice.GetTicketAsync();
 
             if (ticket == null)
             {
-                Console.WriteLine($"Ticket {ticketNumber} not found.");
+                Console.WriteLine($"Ticket {ticket.TicketNumber} not found.");
                 return;
             }
 
-            Console.Write($"Current status of ticket {ticketNumber}: {ticket.Status}\n");
-            Console.Write($"Enter the new status number(1-3) for ticket {ticketNumber} ({string.Join(", ", Enum.GetNames(typeof(TicketStatus)))}): ");
+            Console.Write($"Current status of ticket {ticket.TicketNumber}: {ticket.Status}\n");
+            Console.Write($"Enter the new status number(1-3) for ticket {ticket.TicketNumber} ({string.Join(", ", Enum.GetNames(typeof(TicketStatus)))}): ");
 
             if (!int.TryParse(Console.ReadLine(), out int newStatusInt))
             {
@@ -157,18 +154,39 @@ namespace DatalagringTicketSystem.Services
             }
 
             var newStatus = (TicketStatus)newStatusInt;
-            ticket.Status = (int)newStatus;
+            ticket.Status = (TicketStatus)(int)newStatus;
 
             try
             {
-                await databaseService.UpdateAsync(ticket);
-                Console.WriteLine($"Status of ticket {ticketNumber} has been updated to {newStatus}");
+                await databaseservice.UpdateAsync(ticket);
+                Console.WriteLine($"Status of ticket {ticket.TicketNumber} has been updated to {newStatus}");
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while updating the ticket status: {ex.Message}");
             }
         }
+
+        public async Task WriteCommentAsync()
+        {
+            var databaseService = new DatabaseService();
+            var ticketservice = new TicketService();
+
+            var ticket = await ticketservice.GetTicketAsync();
+
+            if (ticket == null)
+            {
+                Console.WriteLine($"Ticket {ticket.TicketNumber} not found.");
+                return;
+            }
+            Console.Write("Please enter a comment...");
+
+            string comment = Console.ReadLine() ?? "";
+
+            await databaseService.AddCommentAsync(ticket.TicketNumber, comment);
+
+        }
+
     }
 }
 

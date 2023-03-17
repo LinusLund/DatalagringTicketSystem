@@ -8,7 +8,7 @@ namespace DatalagringTicketSystem.Models
         public int TicketNumber { get; set; }
         public string Description { get; set; } = null!;
         public DateTime DateCreated { get; set; }
-
+        
         [DefaultValue(TicketStatus.EjPåbörjad)]
         public TicketStatus Status { get; set; }
 
