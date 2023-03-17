@@ -16,7 +16,7 @@ namespace DatalagringTicketSystem.Services
             var databaseService = new DatabaseService();
             var userService = new UserService();
 
-            
+            // Vi låtasas att jag har byggt in en kontofunktion med inlogg och autentisering och grejer.
             Console.WriteLine("Do you have an existing account? (yes or no)");
             string input = Console.ReadLine().ToLower();
 
@@ -59,7 +59,7 @@ namespace DatalagringTicketSystem.Services
             ticket.Description = Console.ReadLine();
 
 
-            ticket.Status = TicketStatus.EjPåbörjad;
+            ticket.Status = TicketStatus.Ej_Påbörjad;
 
 
             ticket.DateCreated = DateTime.Now;
@@ -90,38 +90,43 @@ namespace DatalagringTicketSystem.Services
                 Console.WriteLine(" ");
             }
         }
-        //Söker ut ett specifikt ärende utifrån TicketNumber, visar även kommentarer på det specifika ärendet.
+        //Söker ut ett specifikt ärende utifrån TicketNumber, visar även kommentarer på det specifika ärendet om det finns några.
         public async Task ShowSpecificTicketAsync()
         {
             var ticketservice = new TicketService();
 
             var ticket = await ticketservice.GetTicketAsync();
-
-            if (ticket != null)
             {
-                Console.WriteLine($"TicketNumber: {ticket.TicketNumber}");
-                Console.WriteLine($"Created by User: {ticket.UserId}");
-                Console.WriteLine($"DateCreated: {ticket.DateCreated}");
-                Console.WriteLine($"Status:{ticket.Status}");
-                Console.WriteLine($"Description: {ticket.Description}");
-                Console.WriteLine("");
 
-                //OM det finns kommentarer, rada upp dom i datumföljd.
-                if (ticket.Comments.Any())
+                if (ticket != null)
                 {
-                    Console.WriteLine("Comments:");
-                    foreach (var comment in ticket.Comments.OrderBy(c => c.CommentDateTime))
+                    Console.WriteLine($"TicketNumber: {ticket.TicketNumber}");
+                    Console.WriteLine($"Created by User: {ticket.UserId}");
+                    Console.WriteLine($"DateCreated: {ticket.DateCreated}");
+                    Console.WriteLine($"Status:{ticket.Status}");
+                    Console.WriteLine($"Description: {ticket.Description}");
+                    Console.WriteLine("");
+
+                    //OM det finns kommentarer, rada upp dom i datumföljd.
+                    if (ticket.Comments.Any())
                     {
-                        Console.WriteLine($" - {comment.CommentDateTime.ToString()} - {comment.CommentText}");
+                        Console.WriteLine("Comments:");
+                        foreach (var comment in ticket.Comments.OrderBy(c => c.CommentDateTime))
+                        {
+                            Console.WriteLine($" - {comment.CommentDateTime.ToString()} - {comment.CommentText}");
+                        }
                     }
                 }
+                else
+                {
+                    Console.Clear();
+                    Console.WriteLine($"No matching ticket with number: {ticket} found.");
+                    Console.WriteLine("");
+
+                }
+
             }
-            else
-            {
-                Console.Clear();
-                Console.WriteLine($"No matching ticket with number: {ticket.TicketNumber} found.");
-                Console.WriteLine("");
-            }
+           
         }
         //Uppdaterar Statusen på ett specifikt ärende
         public async Task UpdateStatusAsync()

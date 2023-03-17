@@ -5,8 +5,8 @@ namespace DatalagringTicketSystem.Services
 {
     internal class TicketService
     {
-
-        internal async Task<TicketModel> GetTicketAsync()
+        //Hämtar Ticket baserat på ID
+        internal async Task<TicketModel?> GetTicketAsync()
         {
             var databaseService = new DatabaseService();
             Console.Clear();
@@ -21,7 +21,7 @@ namespace DatalagringTicketSystem.Services
 
             if (ticket == null)
             {
-                Console.WriteLine($"Ticket {ticketNumber} not found.");
+                Console.WriteLine($"Ticket {ticket} not found.");
                 return null;
             }
             //Kallar på GetCommentsAsync med det angivna ticket-Idt och lägger in kommentarer i en ICollection.
