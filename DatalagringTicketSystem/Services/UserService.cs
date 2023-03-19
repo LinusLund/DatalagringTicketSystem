@@ -10,38 +10,25 @@ namespace DatalagringTicketSystem.Services
         //Metod för att hitta användare baserat på Email
         internal async Task<UserModel> GetUserByEmailAsync(string email)
         {
-            var _user = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
-            if (_user != null)
-                return new UserModel
-                {
-                    UserId = _user.UserId,
-                    FirstName = _user.FirstName,
-                    LastName = _user.LastName,
-                    Email = _user.Email,
-                    PhoneNumber = _user.PhoneNumber,
-                };
+            if (email == null)
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
 
-            else
-                return null!;
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x => x.Email == email);
+            return userEntity;
         }
         //Metod för att hitta användare baserat på Id
         internal async Task<UserModel> GetUserByIdAsync(Guid UserId)
-        {
-            var userEntity = await _context.Users.FindAsync(UserId);
-
-            if (userEntity != null)
+        {    
+            if (userEntity == null)
             {
-                return new UserModel
-                {
-                    UserId = userEntity.UserId,
-                    FirstName = userEntity.FirstName,
-                    LastName = userEntity.LastName,
-                    Email = userEntity.Email,
-                    PhoneNumber = userEntity.PhoneNumber
-                };
+                throw new ArgumentNullException(nameof(UserId));
             }
 
-            return null;
+            var userEntity = await _context.Users.FirstOrDefaultAsync(x=>x.UserId== UserId);
+            return userEntity;
+             
         }
         //Skapa ny användare
         internal async Task<UserModel> CreateUserAsync()
