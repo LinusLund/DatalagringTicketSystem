@@ -21,7 +21,7 @@ namespace DatalagringTicketSystem.Services
         //Metod för att hitta användare baserat på Id
         internal async Task<UserModel> GetUserByIdAsync(Guid UserId)
         {    
-            if (userEntity == null)
+            if (UserId == Guid.Empty)
             {
                 throw new ArgumentNullException(nameof(UserId));
             }

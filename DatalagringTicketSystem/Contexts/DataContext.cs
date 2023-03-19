@@ -6,7 +6,7 @@ namespace DatalagringTicketSystem.Contexts
 {
     internal class DataContext : DbContext
     {
-        private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Linus Lund\\Documents\\Cskarpt\\DatalagringTicketSystem\\DatalagringTicketSystem\\Contexts\\SupportTicketDB.mdf\";Integrated Security=True;Connect Timeout=30";
+        private readonly string _connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=\"C:\\Users\\Linus Lund\\source\\repos\\DatalagringTicketSystem\\DatalagringTicketSystem\\Contexts\\SupportTicketDB.mdf\";Integrated Security=True;Connect Timeout=30";
 
         #region constructors
 

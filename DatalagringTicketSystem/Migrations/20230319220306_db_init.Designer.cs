@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DatalagringTicketSystem.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230316200912_MyFinalForm")]
-    partial class MyFinalForm
+    [Migration("20230319220306_db_init")]
+    partial class db_init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,12 +41,12 @@ namespace DatalagringTicketSystem.Migrations
                         .HasMaxLength(250)
                         .HasColumnType("nvarchar(250)");
 
-                    b.Property<int>("TicketId")
+                    b.Property<int>("TicketNumber")
                         .HasColumnType("int");
 
                     b.HasKey("CommentId");
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("TicketNumber");
 
                     b.ToTable("Comments");
                 });
@@ -82,16 +82,16 @@ namespace DatalagringTicketSystem.Migrations
 
             modelBuilder.Entity("DatalagringTicketSystem.Models.Entities.TicketStatusEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("StatusId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StatusId"));
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("StatusId");
 
                     b.ToTable("TicketStatus");
                 });
@@ -134,7 +134,7 @@ namespace DatalagringTicketSystem.Migrations
                 {
                     b.HasOne("DatalagringTicketSystem.Models.Entities.TicketEntity", "Ticket")
                         .WithMany("Comments")
-                        .HasForeignKey("TicketId")
+                        .HasForeignKey("TicketNumber")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
